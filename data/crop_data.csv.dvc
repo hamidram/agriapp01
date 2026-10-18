@@ -1,0 +1,5 @@
+outs:
+- md5: 0747aea5293dc7725d675ef9fc00d151
+  size: 4260
+  hash: md5
+  path: crop_data.csv
