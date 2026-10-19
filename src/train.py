@@ -45,7 +45,11 @@ def train_model():
         print(f"Model trained successfully with Accuracy: {acc:.2f}")
 
         # Log and register model artifact
-        mlflow.sklearn.log_model(model, "crop_model")
+        mlflow.sklearn.log_model(
+            model,
+            "crop_model",
+            skops_trusted_types=["sklearn.tree._tree.Tree"],
+)
 
 if __name__ == "__main__":
     train_model()
