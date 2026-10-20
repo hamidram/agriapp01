@@ -1,0 +1,24 @@
+artifact_path: file:///C:/_MyDocs/_LCourses/_AgriDS/agriapp01/mlruns/2/models/m-4bf25c5fa4ab400986786e43e2954263/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.11.9
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.9.1
+    skops_trusted_types:
+    - sklearn.tree._tree.Tree
+mlflow_version: 3.17.1
+model_id: m-4bf25c5fa4ab400986786e43e2954263
+model_size_bytes: 878678
+model_uuid: m-4bf25c5fa4ab400986786e43e2954263
+prompts: null
+run_id: 5b5d6e1daab74b9ca276d6546587ecc7
+utc_time_created: '2026-10-19 15:45:29.391117'
