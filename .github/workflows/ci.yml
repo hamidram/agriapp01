@@ -25,7 +25,6 @@ jobs:
         pip install -r requirements.txt
         pip install pytest
 
-    - name: Run Tests
+    - name: Run Unit Tests
       run: |
-        # Add your test suite command here (e.g., pytest tests/)
-        pytest --maxfail=1 --disable-warnings -q
+        pytest -v

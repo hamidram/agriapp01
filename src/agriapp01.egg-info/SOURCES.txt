@@ -1,0 +1,10 @@
+pyproject.toml
+src/api.py
+src/pipeline_workflow.py
+src/train.py
+src/agriapp01.egg-info/PKG-INFO
+src/agriapp01.egg-info/SOURCES.txt
+src/agriapp01.egg-info/dependency_links.txt
+src/agriapp01.egg-info/requires.txt
+src/agriapp01.egg-info/top_level.txt
+tests/test_utils.py

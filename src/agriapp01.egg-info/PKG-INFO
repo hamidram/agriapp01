@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: agriapp01
+Version: 0.1.0
+Requires-Dist: streamlit
+Requires-Dist: fastapi
+Requires-Dist: requests
+Requires-Dist: pytest
