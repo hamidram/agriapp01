@@ -10,6 +10,9 @@ dependencies = [
     "uvicorn",
     "streamlit",
     "requests",
+    "pandas",
+    "joblib",
+    "scikit-learn",
     "pytest",
     "httpx"
 ]

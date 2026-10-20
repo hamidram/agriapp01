@@ -2,30 +2,25 @@
 Unit tests for the Agricultural Yield Intelligence FastAPI backend.
 """
 from fastapi.testclient import TestClient
-import sys
-from pathlib import Path
+import pytest
 
-# Ensure the root directory is in the python path
-root_dir = Path(__file__).resolve().parent.parent
-if str(root_dir) not in sys.path:
-    sys.path.insert(0, str(root_dir))
+from src.api import app
 
-# Import your FastAPI app instance (adjust 'main' if your file is named differently, e.g., 'app.main')
-try:
-    from main import app
-except ImportError:
-    # Fallback if app is structured inside a package
-    from src.main import app 
 
-client = TestClient(app)
+@pytest.fixture
+def client():
+    with TestClient(app) as test_client:
+        yield test_client
 
-def test_read_root():
+
+def test_read_root(client):
     """Test the root endpoint or health check if available."""
     response = client.get("/")
     # If you don't have a root GET endpoint, status 404 or 200 is fine depending on your main.py setup
     assert response.status_code in [200, 404]
 
-def test_predict_endpoint_valid_payload():
+
+def test_predict_endpoint_valid_payload(client):
     """Test the /predict endpoint with valid agricultural telemetry inputs."""
     payload = {
         "soil_moisture_pct": 30.0,
