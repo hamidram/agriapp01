@@ -3,8 +3,16 @@ import mlflow
 import mlflow.sklearn
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, precision_score
+from sklearn.metrics import accuracy_score
 import pandas as pd
+import joblib
+from pathlib import Path
+
+def save_model(model, model_path: str):
+    """Save the trained model to a specified path."""
+    Path(model_path).parent.mkdir(parents=True, exist_ok=True)
+    joblib.dump(model, model_path)
+    print(f"Model saved to {model_path}")
 
 def train_model():
     # Set MLflow experiment name
@@ -12,14 +20,24 @@ def train_model():
 
     with mlflow.start_run():
         print("Loading dataset...")
-        # Simulated or loaded dataset
-        data = pd.read_csv("data/crop_data.csv") if False else pd.DataFrame({
-            'soil_moisture': [20, 40, 60, 80, 30, 50],
-            'temperature': [15, 25, 30, 35, 20, 22],
-            'yield_target': [0, 1, 1, 0, 0, 1]
-        })
+        # Load the real dataset generated in Week 1
+        data_path = Path("data/crop_data.csv")
+        if not data_path.exists():
+            raise FileNotFoundError(f"Dataset not found at {data_path}. Run 'dvc pull' first!")
+        
+        data = pd.read_csv(data_path)
 
-        X = data[['soil_moisture', 'temperature']]
+        # Ensure target variable exists (mapping yield_target or classification label)
+        # Note: If your CSV has 'crop_yield_tha' (continuous), convert to binary or use a Classifier/Regressor accordingly.
+        # Here we create a dummy target if 'yield_target' isn't in the CSV column list:
+        if 'yield_target' not in data.columns:
+            # For demonstration, create a binary target based on yield threshold
+            data['yield_target'] = (data['crop_yield_tha'] > data['crop_yield_tha'].median()).astype(int)
+
+        # Exact feature names matching API schema and model expectation
+        feature_columns = ['soil_moisture_pct', 'temperature_c', 'ph_level', 'rainfall_mm']
+        
+        X = data[feature_columns]
         y = data['yield_target']
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -44,12 +62,17 @@ def train_model():
         mlflow.log_metric("accuracy", acc)
         print(f"Model trained successfully with Accuracy: {acc:.2f}")
 
-        # Log and register model artifact
+        # Log and register model artifact in MLflow
         mlflow.sklearn.log_model(
             model,
             "crop_model",
             skops_trusted_types=["sklearn.tree._tree.Tree"],
-)
+        )
+        
+        # Save model locally for FastAPI / Docker
+        save_model(model, "models/model.pkl")
+
+        return model
 
 if __name__ == "__main__":
     train_model()
