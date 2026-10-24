@@ -4,12 +4,16 @@ from pydantic import BaseModel
 import joblib
 from pathlib import Path
 import pandas as pd
+from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI(
     title="Agricultural Intelligence API",
     description="API for predicting agricultural outcomes based on soil and climate telemetry.",
     version="1.0.0"
 )
+
+# Initialize and instrument Prometheus metrics
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
 # 1. Update schema to match the exact feature names used during model training
 class AgriInput(BaseModel):
